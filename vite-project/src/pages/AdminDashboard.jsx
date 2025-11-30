@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EventForm from "../components/EventForm";
 
-export default function AdminDashboard({ events, onCreateEvent, onDeleteEvent, onUpdateEvent }) {
+export default function AdminDashboard({ events, onCreateEvent, onDeleteEvent, onUpdateEvent, students = [] }) {
     const [editingEvent, setEditingEvent] = useState(null);
 
     const handleEdit = (event) => {
@@ -172,7 +172,7 @@ export default function AdminDashboard({ events, onCreateEvent, onDeleteEvent, o
                                 <div style={{ marginTop: '8px' }}>
                                     <small style={{ color: '#666', fontWeight: 'bold' }}>Registered: </small>
                                     <span style={{ color: '#333', fontSize: '0.8em' }}>
-                                        {e.participants.join(', ')}
+                                        {e.participants.map(pid => (students.find(s => s.id === pid)?.name || pid)).join(', ')}
                                     </span>
                                 </div>
                             )}

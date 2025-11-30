@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Toast from './components/Toast';
 import Home from './pages/Home';
 import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -14,6 +15,14 @@ import Footer from './components/Footer';
 function App() {
   const [userRole, setUserRole] = useState('student'); // Manage role here
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+  const [currentUser, setCurrentUser] = useState(null); // store logged-in user info (for students)
+  const [students, setStudents] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('students') || '[]') || [];
+    } catch (e) {
+      return [];
+    }
+  });
   const [events, setEvents] = useState([
     { id: 1, title: "Chess Club", date: "2025-11-10", description: "Weekly chess practice and tournaments", participants: [], registered: false, level: "State", category: "Sports" },
     { id: 2, title: "Soccer Tryouts", date: "2025-11-15", description: "Join the team tryouts for the upcoming season", participants: [], registered: false, level: "International", category: "Sports" },
@@ -34,11 +43,25 @@ function App() {
   ]);
 
   const register = (id) => {
+    const title = events.find(ev => ev.id === id)?.title || 'event';
+    // only proceed if a student is logged in
+    const studentId = currentUser?.id;
     setEvents(list => list.map(ev => {
       if (ev.id !== id) return ev;
-      const already = ev.participants || [];
-      return { ...ev, participants: [...already, "student"], registered: true };
+      const already = Array.isArray(ev.participants) ? ev.participants : [];
+      // avoid duplicate registration
+      const participants = studentId && !already.includes(studentId) ? [...already, studentId] : already;
+      return { ...ev, participants, registered: !!(studentId && participants.includes(studentId)) };
     }));
+    // persist registration on student record
+    if (studentId) {
+      setStudents(slist => {
+        const updated = slist.map(s => s.id === studentId ? { ...s, registrations: Array.isArray(s.registrations) ? Array.from(new Set([...(s.registrations || []), id])) : [id] } : s);
+        try { localStorage.setItem('students', JSON.stringify(updated)); } catch (e) {}
+        return updated;
+      });
+    }
+    setToast({ open: true, message: `You have successfully registered for "${title}".`, type: 'success' });
   };
 
   const createEvent = (data) => {
@@ -55,20 +78,54 @@ function App() {
   };
 
   const unregister = (id) => {
+    const title = events.find(ev => ev.id === id)?.title || 'event';
+    const studentId = currentUser?.id;
     setEvents(list => list.map(ev => {
       if (ev.id !== id) return ev;
-      return { ...ev, participants: (ev.participants || []).slice(0, -1), registered: false };
+      const already = Array.isArray(ev.participants) ? ev.participants : [];
+      const participants = studentId ? already.filter(p => p !== studentId) : already.slice(0, -1);
+      return { ...ev, participants, registered: !!(studentId && participants.includes(studentId)) };
     }));
+    // update student registrations
+    if (studentId) {
+      setStudents(slist => {
+        const updated = slist.map(s => s.id === studentId ? { ...s, registrations: (s.registrations || []).filter(rid => rid !== id) } : s);
+        try { localStorage.setItem('students', JSON.stringify(updated)); } catch (e) {}
+        return updated;
+      });
+    }
+    setToast({ open: true, message: `You have been unregistered from "${title}".`, type: 'success' });
   };
 
-  const handleLogin = (role) => {
+  const [toast, setToast] = useState({ open: false, message: '', type: 'success' });
+
+  function closeToast() {
+    setToast(t => ({ ...t, open: false }));
+  }
+
+  const handleLogin = (role, user = null) => {
     setUserRole(role);
     setIsLoggedIn(true);
+    // if logging in as a student, try to resolve the stored student object
+    if (role === 'student' && user) {
+      const found = students.find(s => String(s.id) === String(user.id)) || students.find(s => s.email === user.email) || students.find(s => s.name === user.name) || null;
+      if (found) {
+        setCurrentUser(found);
+      } else {
+        // user not present in central students list yet (likely just signed up) -> add and persist
+        const toAdd = { ...user, registrations: user.registrations || [] };
+        setStudents(prev => { const next = [...prev, toAdd]; try { localStorage.setItem('students', JSON.stringify(next)); } catch(e){}; return next; });
+        setCurrentUser(toAdd);
+      }
+    } else {
+      setCurrentUser(user);
+    }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserRole('student'); // Reset to default
+    setCurrentUser(null);
   };
 
   return (
@@ -78,12 +135,12 @@ function App() {
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+        <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={handleLogout} currentUser={currentUser} />
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Home events={events} isLoggedIn={isLoggedIn} userRole={userRole} />} />
-            <Route path="/dashboard" element={<StudentDashboard events={events} onRegister={register} onUnregister={unregister} />} />
-            <Route path="/admin" element={<AdminDashboard events={events} onCreateEvent={createEvent} onDeleteEvent={deleteEvent} onUpdateEvent={updateEvent} />} />
+            <Route path="/dashboard" element={<StudentDashboard events={events} onRegister={register} onUnregister={unregister} currentUser={currentUser} />} />
+            <Route path="/admin" element={<AdminDashboard events={events} students={students} onCreateEvent={createEvent} onDeleteEvent={deleteEvent} onUpdateEvent={updateEvent} />} />
             <Route path="/activity/:id" element={<ActivityDetails events={events} />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -93,6 +150,7 @@ function App() {
           </Routes>
         </div>
         <Footer />
+        <Toast open={toast.open} message={toast.message} onClose={closeToast} type={toast.type} />
       </div>
     </Router>
   );

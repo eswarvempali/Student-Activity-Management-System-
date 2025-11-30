@@ -5,7 +5,8 @@ import { useStudents } from '../../hooks/useStudents';
 const StudentDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { students } = useStudents();
-    const student = students.find(student => student.id === id);
+    const idNum = Number(id);
+    const student = students.find(student => student.id === idNum);
 
     if (!student) {
         return <div>Student not found</div>;
@@ -17,7 +18,8 @@ const StudentDetail: React.FC = () => {
             <p><strong>Name:</strong> {student.name}</p>
             <p><strong>Age:</strong> {student.age}</p>
             <p><strong>Email:</strong> {student.email}</p>
-            <p><strong>Course:</strong> {student.course}</p>
+            <p><strong>Enrolled:</strong> {student.enrolled ? 'Yes' : 'No'}</p>
+            {student.course && <p><strong>Course:</strong> {student.course}</p>}
         </div>
     );
 };

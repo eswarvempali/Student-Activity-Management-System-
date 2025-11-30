@@ -1,7 +1,7 @@
 import React from "react";
 import EventList from "../components/EventList";
 
-export default function StudentDashboard({ events, onRegister, onUnregister }) {
+export default function StudentDashboard({ events, onRegister, onUnregister, currentUser }) {
     return (
         <div style={{
             padding: '0',
@@ -16,7 +16,7 @@ export default function StudentDashboard({ events, onRegister, onUnregister }) {
                 fontSize: '2.5em',
                 padding: '20px'
             }}>Student Dashboard</h1>
-            <EventList events={events} onRegister={onRegister} onUnregister={onUnregister} />
+            <EventList events={events} onRegister={onRegister} onUnregister={onUnregister} currentUser={currentUser} />
         </div>
     );
 }

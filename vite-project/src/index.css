@@ -67,3 +67,124 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Theme variables and modern styles for a more attractive UI */
+:root {
+  --bg: #0f172a; /* dark navy */
+  --surface: #0b1220; /* card surface */
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --primary: #4f46e5; /* indigo */
+  --primary-600: #4338ca;
+  --accent: #06b6d4; /* cyan */
+  --success: #16a34a;
+  --danger: #ef4444;
+  --glass: rgba(255,255,255,0.04);
+  --radius: 12px;
+  --shadow-1: 0 6px 20px rgba(2,6,23,0.6);
+}
+
+body {
+  background: linear-gradient(180deg, #071029 0%, #071833 50%, #08121f 100%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+nav {
+  background: linear-gradient(90deg, rgba(79,70,229,0.95), rgba(6,182,212,0.8));
+  color: var(--text) !important;
+  box-shadow: var(--shadow-1);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+nav h2, nav div { color: var(--text); }
+
+/* Links */
+nav a {
+  color: rgba(255,255,255,0.95);
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background 0.18s, transform 0.12s;
+}
+nav a:hover { background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+
+.add-btn, .btn-primary {
+  background: linear-gradient(90deg,var(--primary),var(--primary-600));
+  color: white;
+  padding: 8px 14px;
+  border-radius: 18px;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 8px 30px rgba(79,70,229,0.18);
+}
+.btn-ghost {
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Inputs and forms */
+input, select, textarea {
+  background: var(--glass);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: box-shadow 0.12s, transform 0.08s;
+}
+input:focus, select:focus, textarea:focus { box-shadow: 0 6px 18px rgba(79,70,229,0.15); outline: none; transform: translateY(-1px); }
+
+/* Cards */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(2,6,23,0.6);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.student-list .student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.12s;
+}
+.student-list .student-item:hover { background: rgba(255,255,255,0.02); }
+
+/* Profile dropdown */
+.profile-dropdown { min-width: 160px; border-radius: 10px; overflow: hidden; }
+.profile-dropdown a, .profile-dropdown button { display: block; padding: 10px 12px; color: #04201a; text-decoration: none; }
+
+/* Toasts */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  min-width: 240px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+.toast.success { background: linear-gradient(90deg,var(--success), #059669); }
+.toast.error { background: linear-gradient(90deg,var(--danger), #ef4444); }
+.toast .title { font-weight: 800; margin-bottom: 6px; }
+
+/* Small utilities */
+.muted { color: var(--muted); }
+.rounded { border-radius: 12px; }
+
+@media (max-width: 800px) {
+  .app-container { padding: 12px; }
+  nav { padding: 12px; }
+}

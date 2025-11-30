@@ -11,9 +11,24 @@ const useStudents = () => {
         const loadStudents = async () => {
             try {
                 const data = await fetchStudents();
-                setStudents(data);
+                // If API returns no data, fall back to sample students
+                if (!data || (Array.isArray(data) && data.length === 0)) {
+                    setStudents([
+                        { id: 1, name: 'Alice Johnson', age: 20, email: 'alice.johnson@example.com', enrolled: true },
+                        { id: 2, name: 'Bob Smith', age: 22, email: 'bob.smith@example.com', enrolled: false },
+                        { id: 3, name: 'Catherine Lee', age: 19, email: 'catherine.lee@example.com', enrolled: true }
+                    ]);
+                } else {
+                    setStudents(data);
+                }
             } catch (err) {
-                setError('Failed to fetch students');
+                // If fetching fails, provide demo students so profile pages can display data
+                setStudents([
+                    { id: 1, name: 'Alice Johnson', age: 20, email: 'alice.johnson@example.com', enrolled: true },
+                    { id: 2, name: 'Bob Smith', age: 22, email: 'bob.smith@example.com', enrolled: false },
+                    { id: 3, name: 'Catherine Lee', age: 19, email: 'catherine.lee@example.com', enrolled: true }
+                ]);
+                setError('Failed to fetch students; showing demo data');
             } finally {
                 setLoading(false);
             }

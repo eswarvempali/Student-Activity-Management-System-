@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Navbar({ userRole, isLoggedIn, onLogout }) {
+function Navbar({ userRole, isLoggedIn, onLogout, currentUser }) {
   const [query, setQuery] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
@@ -44,14 +44,7 @@ function Navbar({ userRole, isLoggedIn, onLogout }) {
         )}
         <Link to="/about" style={{ color: 'white', textDecoration: 'none' }}>About</Link>
         <Link to="/contact" style={{ color: 'white', textDecoration: 'none' }}>Contact</Link>
-        <Link to="/students/new" style={{
-          backgroundColor: '#10B981',
-          color: '#04201a',
-          padding: '6px 12px',
-          borderRadius: '16px',
-          textDecoration: 'none',
-          fontWeight: '600'
-        }}>Add Student</Link>
+        <Link to="/students/new" className="add-btn" style={{ textDecoration: 'none' }}>Add Student</Link>
       </div>
 
       <form onSubmit={onSearch} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -60,9 +53,10 @@ function Navbar({ userRole, isLoggedIn, onLogout }) {
           placeholder="Search students..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          className="search-input"
           style={{ padding: '6px 8px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.06)', color: 'white' }}
         />
-        <button type="submit" style={{ padding: '6px 10px', borderRadius: '12px', border: 'none', background: '#0369A1', color: 'white', cursor: 'pointer' }}>Search</button>
+        <button type="submit" className="btn-primary">Search</button>
       </form>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '12px', position: 'relative' }}>
@@ -81,21 +75,13 @@ function Navbar({ userRole, isLoggedIn, onLogout }) {
           <>
             <button
               onClick={() => setProfileOpen((s) => !s)}
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.08)',
-                color: 'white',
-                border: 'none',
-                padding: '8px 12px',
-                borderRadius: '18px',
-                cursor: 'pointer',
-                fontWeight: '600'
-              }}
+              className="btn-ghost"
             >
               Me ▾
             </button>
 
             {profileOpen && (
-              <div style={{ position: 'absolute', right: 0, top: '56px', background: 'white', color: '#04201a', borderRadius: '8px', boxShadow: '0 6px 18px rgba(0,0,0,0.15)', padding: '8px', minWidth: '160px' }}>
+              <div className="profile-dropdown card" style={{ position: 'absolute', right: 0, top: '56px', padding: '8px', minWidth: '160px' }}>
                 <Link to="/profile" style={{ display: 'block', padding: '8px', textDecoration: 'none', color: '#04201a' }}>Profile</Link>
                 <Link to="/settings" style={{ display: 'block', padding: '8px', textDecoration: 'none', color: '#04201a' }}>Settings</Link>
                 <button onClick={onLogout} style={{ display: 'block', width: '100%', padding: '8px', background: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer', color: '#dc2626' }}>Logout</button>
@@ -106,9 +92,9 @@ function Navbar({ userRole, isLoggedIn, onLogout }) {
 
       </div>
 
-      {isLoggedIn && (
+            {isLoggedIn && (
         <div style={{ fontWeight: '600', fontSize: '0.85em', marginLeft: '12px' }}>
-          {userRole === 'admin' ? '👨‍💼 Admin' : '🎓 Student'}
+          {currentUser && currentUser.name ? `${currentUser.name}` : (userRole === 'admin' ? '👨‍💼 Admin' : '🎓 Student')}
         </div>
       )}
     </nav>

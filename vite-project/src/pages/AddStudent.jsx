@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function AddStudent() {
+  const location = useLocation();
   const [student, setStudent] = useState({ name: '', email: '', roll: '', className: '' });
   const [saved, setSaved] = useState(null);
 
@@ -8,6 +10,18 @@ export default function AddStudent() {
     const { name, value } = e.target;
     setStudent(s => ({ ...s, [name]: value }));
   }
+
+  // Prefill form from URL query params (e.g. ?name=John&email=john%40example.com&roll=12&className=2025)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const name = params.get('name') || '';
+    const email = params.get('email') || '';
+    const roll = params.get('roll') || '';
+    const className = params.get('className') || '';
+    if (name || email || roll || className) {
+      setStudent({ name, email, roll, className });
+    }
+  }, [location.search]);
 
   function onSubmit(e) {
     e.preventDefault();

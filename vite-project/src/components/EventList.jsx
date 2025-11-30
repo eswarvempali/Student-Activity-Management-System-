@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
-export default function EventList({ events, onRegister, onUnregister }) {
+export default function EventList({ events, onRegister, onUnregister, currentUser }) {
     return (
         <div>
             <h2 style={{
@@ -45,7 +45,7 @@ export default function EventList({ events, onRegister, onUnregister }) {
                             }}>View Details</Link>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                            {e.registered ? (
+                            {currentUser && (e.participants || []).includes(currentUser.id) ? (
                                 <button onClick={() => onUnregister(e.id)} style={{
                                     backgroundColor: '#ff6347',
                                     color: 'white',
