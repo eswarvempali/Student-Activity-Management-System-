@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchStudents, addStudent, updateStudent, deleteStudent } from '../services/api';
 import { Student } from '../types';
 
-const useStudents = () => {
+export const useStudents = () => {
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -48,7 +48,8 @@ const useStudents = () => {
 
     const editStudent = async (student: Student) => {
         try {
-            const updatedStudent = await updateStudent(student);
+            // updateStudent expects (id, studentData)
+            const updatedStudent = await updateStudent(student.id, student);
             setStudents((prev) =>
                 prev.map((s) => (s.id === updatedStudent.id ? updatedStudent : s))
             );
@@ -66,7 +67,24 @@ const useStudents = () => {
         }
     };
 
-    return { students, loading, error, createStudent, editStudent, removeStudent };
+    // Provide backward-compatible aliases (some components expect these names)
+    const addStudent = async (student: Partial<Student>) => {
+        // allow calling addStudent with partial data; delegate to createStudent
+        await createStudent(student as Student);
+    };
+
+    const updateStudent = async (idOrStudent: number | Student, maybeData?: Partial<Student>) => {
+        if (typeof idOrStudent === 'number') {
+            // called as updateStudent(id, data)
+            const composed: Student = { ...(maybeData as Student), id: idOrStudent } as Student;
+            await editStudent(composed);
+        } else {
+            // called as updateStudent(student)
+            await editStudent(idOrStudent);
+        }
+    };
+
+    return { students, loading, error, createStudent, editStudent, removeStudent, addStudent, updateStudent };
 };
 
 export default useStudents;

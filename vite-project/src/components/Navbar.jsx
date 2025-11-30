@@ -16,10 +16,8 @@ function Navbar({ userRole, isLoggedIn, onLogout, currentUser }) {
   }
 
   return (
-    <nav style={{
+    <nav className="site-nav" style={{
       padding: '10px 18px',
-      backgroundColor: '#4CAF50',
-      color: 'white',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -35,15 +33,15 @@ function Navbar({ userRole, isLoggedIn, onLogout, currentUser }) {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: '700' }}>Home</Link>
+        <Link to="/" style={{ color: 'inherit', textDecoration: 'none', fontWeight: '700' }}>Home</Link>
         {isLoggedIn && userRole === 'student' && (
-          <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>Dashboard</Link>
+          <Link to="/dashboard" style={{ color: 'inherit', textDecoration: 'none' }}>Dashboard</Link>
         )}
         {isLoggedIn && userRole === 'admin' && (
-          <Link to="/admin" style={{ color: 'white', textDecoration: 'none' }}>Admin</Link>
+          <Link to="/admin" style={{ color: 'inherit', textDecoration: 'none' }}>Admin</Link>
         )}
-        <Link to="/about" style={{ color: 'white', textDecoration: 'none' }}>About</Link>
-        <Link to="/contact" style={{ color: 'white', textDecoration: 'none' }}>Contact</Link>
+        <Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>About</Link>
+        <Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact</Link>
         <Link to="/students/new" className="add-btn" style={{ textDecoration: 'none' }}>Add Student</Link>
       </div>
 
@@ -54,7 +52,7 @@ function Navbar({ userRole, isLoggedIn, onLogout, currentUser }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="search-input"
-          style={{ padding: '6px 8px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.06)', color: 'white' }}
+          style={{ padding: '6px 8px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.18)', background: 'rgba(255,255,255,0.08)', color: 'white' }}
         />
         <button type="submit" className="btn-primary">Search</button>
       </form>
@@ -65,7 +63,7 @@ function Navbar({ userRole, isLoggedIn, onLogout, currentUser }) {
         {!isLoggedIn ? (
           <Link to="/login" style={{
             backgroundColor: 'white',
-            color: '#4CAF50',
+            color: '#000',
             padding: '8px 14px',
             borderRadius: '20px',
             textDecoration: 'none',

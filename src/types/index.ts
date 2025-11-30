@@ -4,12 +4,16 @@ export interface Student {
     age: number;
     email: string;
     enrolled: boolean;
+    course?: string;
+    grade?: string;
+    registrations?: number[];
 }
 
 export interface StudentFormValues {
     name: string;
     age: number;
     email: string;
+    grade?: string;
 }
 
 export interface StudentContextType {

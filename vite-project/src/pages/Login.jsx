@@ -306,7 +306,7 @@ function Login({ isLoggedIn, userRole, onLogin, onLogout }) {
             <div style={{ marginBottom: 16, textAlign: 'left' }}>
               <label style={{ display: 'block', marginBottom: 8, fontWeight: 700 }}>Or login as an existing student</label>
               <div style={{ display: 'flex', gap: 8 }}>
-                <select value={selectedStudent ? selectedStudent.id : ''} onChange={(e) => setSelectedStudent(students.find(s => String(s.id) === e.target.value))} style={{ flex: 1, padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#04201a', border: '1px solid #e1e5e9' }}>
+                <select value={selectedStudent ? selectedStudent.id : ''} onChange={(e) => setSelectedStudent(students.find(s => String(s.id) === e.target.value))} style={{ flex: 1, padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#000', border: '1px solid #e1e5e9' }}>
                   <option value="">Select student</option>
                   {students.map(s => (<option key={s.id} value={s.id}>{s.name} — {s.email}</option>))}
                 </select>
@@ -329,7 +329,7 @@ function Login({ isLoggedIn, userRole, onLogin, onLogout }) {
               borderRadius: '8px',
               fontSize: '1em',
               backgroundColor: 'white',
-              color: '#04201a',
+              color: '#000',
               transition: 'border-color 0.3s',
               outline: 'none'
             }}>
@@ -361,7 +361,7 @@ function Login({ isLoggedIn, userRole, onLogin, onLogout }) {
               borderRadius: '8px',
               fontSize: '1em',
               backgroundColor: 'white',
-              color: '#04201a',
+              color: '#000',
               transition: 'border-color 0.3s',
               outline: 'none'
             }}
@@ -391,7 +391,7 @@ function Login({ isLoggedIn, userRole, onLogin, onLogout }) {
               borderRadius: '8px',
               fontSize: '1em',
               backgroundColor: 'white',
-              color: '#04201a',
+              color: '#000',
               transition: 'border-color 0.3s',
               outline: 'none'
             }}
@@ -447,10 +447,10 @@ function Login({ isLoggedIn, userRole, onLogin, onLogout }) {
           <div style={{ marginTop: 18, textAlign: 'left' }}>
             <h3 style={{ margin: '0 0 8px 0' }}>New here? Create a student account</h3>
             <div style={{ display: 'grid', gap: 8 }}>
-              <input value={signupName} onChange={e => setSignupName(e.target.value)} placeholder="Full name" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#04201a', border: '1px solid #e1e5e9' }} />
-              <input value={signupEmail} onChange={e => setSignupEmail(e.target.value)} placeholder="Email address" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#04201a', border: '1px solid #e1e5e9' }} />
-              <input type="password" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} placeholder="Password" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#04201a', border: '1px solid #e1e5e9' }} />
-              <input type="password" value={signupConfirm} onChange={e => setSignupConfirm(e.target.value)} placeholder="Confirm password" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#04201a', border: '1px solid #e1e5e9' }} />
+              <input value={signupName} onChange={e => setSignupName(e.target.value)} placeholder="Full name" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#000', border: '1px solid #e1e5e9' }} />
+              <input value={signupEmail} onChange={e => setSignupEmail(e.target.value)} placeholder="Email address" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#000', border: '1px solid #e1e5e9' }} />
+              <input type="password" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} placeholder="Password" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#000', border: '1px solid #e1e5e9' }} />
+              <input type="password" value={signupConfirm} onChange={e => setSignupConfirm(e.target.value)} placeholder="Confirm password" style={{ padding: 10, borderRadius: 8, backgroundColor: 'white', color: '#000', border: '1px solid #e1e5e9' }} />
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={handleSignup} className="btn-primary" style={{ flex: 1 }}>Sign Up & Join</button>
                 <button onClick={() => { setSignupName(''); setSignupEmail(''); setSignupPassword(''); setSignupConfirm(''); }} className="btn-ghost">Clear</button>

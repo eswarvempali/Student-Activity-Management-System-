@@ -2,52 +2,64 @@ import React, { useState } from 'react';
 import { useStudents } from '../../hooks/useStudents';
 import Input from '../../components/form/Input';
 import Select from '../../components/form/Select';
+import { Student } from '../../types';
 
-const StudentForm = ({ student }) => {
+const StudentForm: React.FC<{ student?: Student | null }> = ({ student }) => {
     const { addStudent, updateStudent } = useStudents();
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{ name: string; age: number | string; grade?: string }>({
         name: student ? student.name : '',
         age: student ? student.age : '',
-        grade: student ? student.grade : '',
+        grade: student ? student.grade : ''
     });
 
-    const handleChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleGradeChange = (value: string) => {
+        setFormData({ ...formData, grade: value });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (student) {
-            updateStudent(student.id, formData);
+            updateStudent(student.id, formData as any);
         } else {
-            addStudent(formData);
+            addStudent(formData as any);
         }
     };
+
+    const gradeOptions = [
+        { value: '1st', label: '1st' },
+        { value: '2nd', label: '2nd' },
+        { value: '3rd', label: '3rd' },
+        { value: '4th', label: '4th' },
+        { value: '5th', label: '5th' }
+    ];
 
     return (
         <form onSubmit={handleSubmit}>
             <Input
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
+                value={String(formData.name)}
+                onChange={handleInputChange}
                 placeholder="Student Name"
                 required
             />
             <Input
                 name="age"
                 type="number"
-                value={formData.age}
-                onChange={handleChange}
+                value={String(formData.age)}
+                onChange={handleInputChange}
                 placeholder="Student Age"
                 required
             />
             <Select
-                name="grade"
-                value={formData.grade}
-                onChange={handleChange}
-                options={['1st', '2nd', '3rd', '4th', '5th']}
-                required
+                value={formData.grade || ''}
+                onChange={handleGradeChange}
+                options={gradeOptions}
+                placeholder="Select grade"
             />
             <button type="submit">{student ? 'Update' : 'Add'} Student</button>
         </form>
