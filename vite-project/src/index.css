@@ -54,20 +54,30 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-  nav, .site-nav {
-    background: linear-gradient(90deg, rgba(37,99,235,0.95), rgba(59,130,246,0.9));
-    color: var(--text) !important;
-    box-shadow: var(--shadow-1);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-  }
-  a:hover {
-    color: #747bff;
-  .add-btn, .btn-primary {
-    background: linear-gradient(90deg,var(--primary),var(--primary-600));
-  button {
-    background-color: #f9f9f9;
-  }
+nav, .site-nav {
+  background: linear-gradient(90deg, rgba(37,99,235,0.95), rgba(59,130,246,0.9));
+  color: var(--text) !important;
+  box-shadow: var(--shadow-1);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+a:hover {
+  color: #747bff;
+}
+
+.add-btn, .btn-primary {
+  background: linear-gradient(90deg,var(--primary),var(--primary-600));
+  color: white;
+  padding: 8px 14px;
+  border-radius: 18px;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 8px 30px rgba(79,70,229,0.18);
+}
+
+button {
+  background-color: #f9f9f9;
 }
 
 /* Theme variables and modern styles for a more attractive UI */
